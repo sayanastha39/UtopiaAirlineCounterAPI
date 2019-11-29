@@ -14,7 +14,7 @@ import javax.persistence.Table;
 @Table(name = "Role")
 public class Role implements Serializable{
 
-	private static final long serialVersionUID = 8313781744439271181L;
+	private static final long serialVersionUID = 2483636767258417749L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,11 +35,6 @@ public class Role implements Serializable{
 		this.role = role;
 	}
 
-	@Override
-	public String toString() {
-		return "Role [roleId=" + roleId + ", role=" + role + "]";
-	}
-
 	public Integer getRoleId() {
 		return roleId;
 	}
@@ -54,6 +49,11 @@ public class Role implements Serializable{
 
 	public void setRole(String role) {
 		this.role = role;
+	}
+
+	@Override
+	public String toString() {
+		return "Role [roleId=" + roleId + ", role=" + role + "]";
 	}
 
 	@Override
@@ -86,4 +86,5 @@ public class Role implements Serializable{
 			return false;
 		return true;
 	}
+	
 }

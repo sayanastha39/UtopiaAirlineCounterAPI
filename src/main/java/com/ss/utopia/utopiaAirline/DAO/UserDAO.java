@@ -6,6 +6,6 @@ import com.ss.utopia.utopiaAirline.POJO.*;
 
 @Repository
 
-public interface UserDAO extends JpaRepository<User, Integer> {
+public interface UserDAO extends JpaRepository <User, Integer> {
 
 }
