@@ -1,7 +1,8 @@
 package com.ss.utopia.utopiaAirline.Security;
 
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -30,13 +31,15 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
     public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		
 		auth.userDetailsService(userDetailsService)
-		.passwordEncoder(getPasswordEncoder());
+		.passwordEncoder(encodePWD());
 	}
 	
 	
 	//if using custom login page .and().formLogin().loginPage("/loginpage").permitAll();
 	//if not authenticated will go to login page
 	//.antMatchers("**/users/**").authenticated() only authenticate but not authorized so to authorize use preauthorize
+	
+	
 	@Override
     public void configure(HttpSecurity http) throws Exception {
     	http.csrf().disable();
@@ -47,21 +50,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter{
         	.and()
         	.httpBasic().and().formLogin().permitAll();
     }
-	//.formLogin().permitAll();
-	
-	public PasswordEncoder getPasswordEncoder(){
-		return new PasswordEncoder(){
-			
-			@Override
-			public String encode(CharSequence charSequence) {
-				return charSequence.toString();
-			}
-		
-			@Override
-			public boolean matches(CharSequence charSequence, String s) {
-				return encode(charSequence).equals(s);
-			}
-		};
+
+	@Bean
+	public BCryptPasswordEncoder encodePWD() {
+		return new BCryptPasswordEncoder();
 	}
 }
-

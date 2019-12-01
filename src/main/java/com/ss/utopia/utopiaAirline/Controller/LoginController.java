@@ -29,7 +29,6 @@ public class LoginController {
 	@Autowired
 	LoginService loginService;
 	
-	
 	@PreAuthorize("hasAnyAuthority('Clerk')")
 	@GetMapping ("/{userId}") 
 	 @ResponseStatus(code = HttpStatus.OK)

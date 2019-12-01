@@ -1,12 +1,10 @@
 package com.ss.utopia.utopiaAirline.Service;
 
 import java.util.Optional;
-
 import org.springframework.stereotype.Component;
-
-
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import com.ss.utopia.utopiaAirline.DAO.RoleDAO;
 import com.ss.utopia.utopiaAirline.DAO.UserDAO;
 import com.ss.utopia.utopiaAirline.POJO.User;
@@ -20,6 +18,9 @@ public class LoginService {
 	 @Autowired
 	 RoleDAO roleDao;
 	 
+	 @Autowired
+		private BCryptPasswordEncoder passwordEncoder;
+	 
 	 //get user info
 	 public Optional<User> readUserbyId(Integer userId) {
 		 return userDao.findById(userId);
@@ -32,11 +33,17 @@ public class LoginService {
 	 
 	 //create new user
 	 public User createUser(User user) {
-			return userDao.save(user);
+		 String pwd = user.getPassword();
+		 String encryptPwd = passwordEncoder.encode(pwd);
+		 user.setPassword(encryptPwd);
+		 return userDao.save(user);
 	 }
 	 
 	 //update user info
 	 public User updateUser(User user) {
+		 String pwd = user.getPassword();
+		 String encryptPwd = passwordEncoder.encode(pwd);
+		 user.setPassword(encryptPwd);
 		 return userDao.save(user);
 	 }
 	 
