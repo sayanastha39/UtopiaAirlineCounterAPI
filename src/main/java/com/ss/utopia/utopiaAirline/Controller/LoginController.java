@@ -4,6 +4,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,23 +19,25 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.Produces;
 
-@RestController 
 @RequestMapping("/users")
+@RestController 
 @Produces({"application/xml", "application/json"})
 @Consumes({"application/xml", "application/json"})
+
 public class LoginController {
 	
 	@Autowired
 	LoginService loginService;
 	
 	
-	 @GetMapping ("/{userId}") 
+	@PreAuthorize("hasAnyAuthority('Clerk')")
+	@GetMapping ("/{userId}") 
 	 @ResponseStatus(code = HttpStatus.OK)
 		public Optional<User> readUser(@PathVariable Integer userId) {
-		 System.out.println("this is user test" + userId);
 			 return loginService.readUserbyId(userId);
 		 }
-	 
+	
+	@PreAuthorize("hasAnyAuthority('Clerk')")
 	 @PostMapping("")
 		public ResponseEntity<?> createUser(@RequestBody User user) {
 			
@@ -42,6 +45,7 @@ public class LoginController {
 			return new ResponseEntity<User>(user, HttpStatus.CREATED);
 		}
 	 
+	@PreAuthorize("hasAnyAuthority('Clerk')")
 	 @PutMapping("/{userId}")
 		public ResponseEntity<?> updateUser(@PathVariable Integer userId, @RequestBody User user) {
 			
@@ -56,6 +60,7 @@ public class LoginController {
 			return new ResponseEntity<String>("Invalid ID.", HttpStatus.NOT_FOUND);
 		}
 	 
+	@PreAuthorize("hasAnyAuthority('Clerk')")
 	 @DeleteMapping("/{userId}")
 		public ResponseEntity<?> deleteUserbyId(@PathVariable Integer userId) {
 			

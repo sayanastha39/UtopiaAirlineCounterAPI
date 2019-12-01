@@ -1,7 +1,10 @@
 package com.ss.utopia.utopiaAirline.Service;
 
 import java.util.Optional;
+
 import org.springframework.stereotype.Component;
+
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.ss.utopia.utopiaAirline.DAO.RoleDAO;
@@ -19,7 +22,6 @@ public class LoginService {
 	 
 	 //get user info
 	 public Optional<User> readUserbyId(Integer userId) {
-		 System.out.println("this is  service test" + userId);
 		 return userDao.findById(userId);
 	 }
 	 

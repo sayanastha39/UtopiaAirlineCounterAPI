@@ -6,8 +6,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import java.util.Collection;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -24,8 +22,6 @@ public class Role implements Serializable{
 	@Column(name = "role")
 	private String role;
 	
-	@OneToMany(mappedBy = "roleId")
-	private Collection<User> User;
 	
 	public Role() {}
 
@@ -34,7 +30,6 @@ public class Role implements Serializable{
 		this.roleId = roleId;
 		this.role = role;
 	}
-
 	public Integer getRoleId() {
 		return roleId;
 	}
@@ -50,6 +45,7 @@ public class Role implements Serializable{
 	public void setRole(String role) {
 		this.role = role;
 	}
+
 
 	@Override
 	public String toString() {
@@ -86,5 +82,4 @@ public class Role implements Serializable{
 			return false;
 		return true;
 	}
-	
 }
