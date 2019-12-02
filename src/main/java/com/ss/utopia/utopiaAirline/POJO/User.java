@@ -1,25 +1,14 @@
 package com.ss.utopia.utopiaAirline.POJO;
 
 import java.io.Serializable;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-
 import java.util.Collection;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "User")
 public class User implements Serializable{
 
-	private static final long serialVersionUID = 5977979445458792471L;
+	private static final long serialVersionUID = 3107358274892826859L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +20,7 @@ public class User implements Serializable{
 	
 	@Column(name = "lastName")
 	private String lastName;
-	
+
 	@Column(name = "phoneNumber")
 	private String phoneNumber;
 	
@@ -47,32 +36,28 @@ public class User implements Serializable{
 	@Column(name = "password")
 	private String password;
 	
-	@OneToMany(mappedBy = "userId")
-	private Collection<Reservation> Reservation;
+	@Column(name = "active")
+	private Integer active;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "roleId")
-	private Role roleId;
-	
-	@OneToMany(mappedBy = "userId")
-	private Collection<CardDetails> CardDetails;
+	@OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(name = "UserRole", joinColumns = @JoinColumn(name = "user_Id"), inverseJoinColumns = @JoinColumn(name = "role_Id"))
+    private Collection<Role> roleId;
 	
 	public User() {}
-
-	public User(Integer userId, String firstName, String lastName, String phoneNumber, String email, String address,
-			String username, String password, Role roleId) {
-		super();
-		this.userId = userId;
-		this.firstName = firstName;
-		this.lastName = lastName;
-		this.phoneNumber = phoneNumber;
-		this.email = email;
-		this.address = address;
-		this.username = username;
-		this.password = password;
-		this.roleId = roleId;
+	
+	public User(User user) {
+		this.userId = user.getUserId();
+		this.firstName = user.getFirstName();
+		this.lastName = user.getLastName();
+		this.phoneNumber = user.getPhoneNumber();
+		this.email = user.getEmail();
+		this.address = user.getAddress();
+		this.username = user.getUsername();
+		this.password = user.getPassword();
+		this.roleId = user.getRoleId();
+		this.active = user.getActive();
 	}
-
+	
 	public Integer getUserId() {
 		return userId;
 	}
@@ -137,25 +122,42 @@ public class User implements Serializable{
 		this.password = password;
 	}
 
-	public Role getRoleId() {
+	public Integer getActive() {
+		return active;
+	}
+
+	public void setActive(Integer active) {
+		this.active = active;
+	}
+
+	public Collection<Role> getRoleId() {
 		return roleId;
 	}
 
-	public void setRoleId(Role roleId) {
+	public void setRoleId(Collection<Role> roleId) {
 		this.roleId = roleId;
 	}
 
-	@Override
-	public String toString() {
-		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber="
-				+ phoneNumber + ", email=" + email + ", address=" + address + ", username=" + username + ", password="
-				+ password + ", roleId=" + roleId + "]";
+	public User(Integer userId, String firstName, String lastName, String phoneNumber, String email, String address,
+			String username, String password, Integer active, Collection<Role> roleId) {
+		super();
+		this.userId = userId;
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.phoneNumber = phoneNumber;
+		this.email = email;
+		this.address = address;
+		this.username = username;
+		this.password = password;
+		this.active = active;
+		this.roleId = roleId;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((active == null) ? 0 : active.hashCode());
 		result = prime * result + ((address == null) ? 0 : address.hashCode());
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((firstName == null) ? 0 : firstName.hashCode());
@@ -177,6 +179,11 @@ public class User implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (active == null) {
+			if (other.active != null)
+				return false;
+		} else if (!active.equals(other.active))
+			return false;
 		if (address == null) {
 			if (other.address != null)
 				return false;
@@ -224,4 +231,13 @@ public class User implements Serializable{
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "User [userId=" + userId + ", firstName=" + firstName + ", lastName=" + lastName + ", phoneNumber="
+				+ phoneNumber + ", email=" + email + ", address=" + address + ", username=" + username + ", password="
+				+ password + ", active=" + active + ", roleId=" + roleId + "]";
+	}
+
+	
 }
