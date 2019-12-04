@@ -1,6 +1,5 @@
 package com.ss.utopia.utopiaAirline.Service;
 
-import java.util.Optional;
 import org.springframework.stereotype.Component;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +21,10 @@ public class LoginService {
 		private BCryptPasswordEncoder passwordEncoder;
 	 
 	 //get user info
-	 public Optional<User> readUserbyId(Integer userId) {
-		 return userDao.findById(userId);
+	 public User readUserbyUsername(User user) {
+		 return userDao.findByUsername(user.getUsername());
 	 }
+	 
 	 
 	 //delete user info
 	 public void deleteUserbyId(Integer userId) {
@@ -47,14 +47,27 @@ public class LoginService {
 		 return userDao.save(user);
 	 }
 	 
-	//check if user already exists
-		public boolean ifUserExists(Integer userId) {
-			List<User> list = userDao.findAll();
+	//check if user already exists with Id
+			public boolean ifUserExists(Integer userId) {
+				List<User> list = userDao.findAll();
+				
+				boolean exists = list.stream()
+						.anyMatch(id -> id.getUserId().equals(userId));
 			
-			boolean exists = list.stream()
-					.anyMatch(id -> id.getUserId().equals(userId));
+				return exists;
+				
+			}
+			
+	
+			
+	//check if user already exists with username
+	public boolean ifUserNameExists( String username) {
+		List<User> list = userDao.findAll();
 		
-			return exists;
+		boolean unameExists = list.stream()
+				.anyMatch(uname ->  uname.getUsername().equals(username));
+		
+		return unameExists;
 		}
 }
 

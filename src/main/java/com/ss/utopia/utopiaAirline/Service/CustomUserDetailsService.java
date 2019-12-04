@@ -18,7 +18,9 @@ public class CustomUserDetailsService implements UserDetailsService{
 	
 	@Override
 	public UserDetails loadUserByUsername (String username) throws UsernameNotFoundException{
-		Optional<User> optionalUser = userDao.findByUsername(username);
+		
+		Optional <User> optionalUser = Optional.ofNullable(userDao.findByUsername(username));
+		
 		
 		//throwing exception if DB does not return a value
 		optionalUser
